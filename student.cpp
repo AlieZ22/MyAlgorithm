@@ -59,7 +59,14 @@ bool validStudent(Student s){
     return s.getSchoolName() == "HUST";
 }
 
+bool validStudentRef(const Student& cs){
+    return cs.getSchoolName() == "HUST";
+}
+
 int main(){
     Student wlz("wlz", "An Hui", "HUST", "Hu Bei");
-    cout << wlz.getName() << " is a HUSTer? " << (validStudent(wlz) ? "YES" : "NO") << endl;
+    // 值传递
+    //cout << wlz.getName() << " is a HUSTer? " << (validStudent(wlz) ? "YES" : "NO") << endl;
+    // 引用传递
+    cout << wlz.getName() << " is a HUSTer? " << (validStudentRef(wlz) ? "YES" : "NO") << endl;
 }
