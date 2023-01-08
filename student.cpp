@@ -26,6 +26,12 @@ public:
     string getAddress() const{
         return this->address;
     }
+    void setName(string n){
+        this->name = n;
+    }
+    void setAddress(string a){
+        this->address = a;
+    }
 private:
     string name;
     string address;
@@ -44,11 +50,22 @@ public:
     schoolName(cs.schoolName), schoolAddress(cs.schoolAddress){
         cout << "Student constructed by copying. pointer: " << this << endl;
     }
+    Student& operator=(const Student& cs){
+        this->setName(cs.getName());
+        this->setAddress(cs.getAddress());
+        this->schoolName = cs.schoolName;
+        this->schoolAddress = cs.schoolAddress;
+        cout << "Student assignment." << endl;
+    }
     ~Student(){
         cout << "Student destructed. pointer: "<< this << endl;
     }
     string getSchoolName() const{
         return this->schoolName;
+    }
+    friend const Student& clonedStudent(const Student& cs){    // 返回堆对象的引用
+        Student *clone_s = new Student(cs);
+        return *clone_s;
     }
 private:
     string schoolName;
@@ -68,5 +85,10 @@ int main(){
     // 值传递
     //cout << wlz.getName() << " is a HUSTer? " << (validStudent(wlz) ? "YES" : "NO") << endl;
     // 引用传递
-    cout << wlz.getName() << " is a HUSTer? " << (validStudentRef(wlz) ? "YES" : "NO") << endl;
+    //cout << wlz.getName() << " is a HUSTer? " << (validStudentRef(wlz) ? "YES" : "NO") << endl;
+
+
+    // 测试返回堆对象的引用
+    delete &clonedStudent(wlz);
+    return 0;
 }
