@@ -3,7 +3,7 @@
 using namespace std;
 
 /*
-* @method: 快慢指针，一次遍历。快慢一起移动，快值赋慢值，慢满足条件停下
+* @method: 快慢指针，一次遍历。快慢一起移动，快值赋慢值，慢满足条件(遇到val)停下
 * @evaluation: O(n)
 */
 
