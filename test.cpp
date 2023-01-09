@@ -5,6 +5,14 @@ using namespace std;
 class Rational{
 public:
     Rational(int n=0, int d=1):numerator(n),denominator(d){}        // 刻意不加explicit，以允许隐式类型转换
+    Rational(const Rational& rhs){
+        this->numerator = rhs.numerator;
+        this->denominator = rhs.denominator;
+    }
+    Rational& operator=(const Rational& rhs){
+        this->numerator = rhs.numerator;
+        this->denominator = rhs.denominator;
+    }
     int getNumerator() const{
         return this->numerator;
     }
