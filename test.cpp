@@ -2,58 +2,38 @@
 #include<algorithm>
 using namespace std;
 
-const int N = 10;
-
-// 快速排序 练习
-void quick_sort(int q[], int l, int r)
-{
-    if(l >= r) return;
-
-    int i = l - 1, j = r + 1, x = q[l + r >> 1];
-    while(i<j){
-        do i++; while (q[i] < x);
-        do j--; while (q[j] > x);
-        if(i<j) swap(q[i], q[j]);
+class Rational{
+public:
+    Rational(int n=0, int d=1):numerator(n),denominator(d){}        // 刻意不加explicit，以允许隐式类型转换
+    int getNumerator() const{
+        return this->numerator;
     }
-    quick_sort(q, l, j);
-    quick_sort(q, j+1, r);
-}
-
-// 归并排序 练习
-int tmp[N];
-void merge_sort(int q[], int l, int r)
-{
-    if(l >= r)
-        return;
-
-    int mid = (r - l) / 2 + l;
-    merge_sort(q, l, mid);
-    merge_sort(q, mid + 1, r);
-
-    int k = 0, i = l, j = mid + 1;
-    while(i<=mid && j<=r){
-        if(q[i] <= q[j])
-            tmp[k++] = q[i++];
-        else
-            tmp[k++] = q[j++];
+    int getDenominator() const{
+        return this->denominator;
     }
-    while(i<=mid)
-        tmp[k++] = q[i++];
-    while(j<=r)
-        tmp[k++] = q[j++];
-    for (i = l, j = 0; i <= r; i++, j++)
-        q[i] = tmp[j];
+    void trim(){      // 最简分数形式
+        if(numerator%denominator == 0){
+            numerator = numerator / denominator;
+            denominator = 1;
+        }
+    }
+private:
+    int numerator;     // 分子
+    int denominator;   // 分母
+};
+
+// non-member 函数进行运算，以支持int与rational的混合式运算
+const Rational operator* (const Rational& lhs, const Rational& rhs){
+    Rational res(lhs.getNumerator() * rhs.getNumerator(),
+                    lhs.getDenominator() * rhs.getDenominator());
+    res.trim();
+    return res;
 }
-
-
 
 int main()
 {
-    int arr[N] = {8, 1, 9, 10, 83, 234, 12, 12, 13, 15};
-    merge_sort(arr, 0, N-1);
-    cout << "after sort: ";
-    for (int i = 0; i < N; i++){
-        cout << arr[i] << " ";
-    }
-    cout << endl;
+    Rational oneHalf(1, 2);
+    Rational result = 4 * oneHalf;
+    cout << result.getNumerator() << "/" << result.getDenominator() << endl;
+    return 0;
 }
