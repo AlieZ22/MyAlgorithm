@@ -1,5 +1,6 @@
 #include<iostream>
 #include<algorithm>
+#include<string>
 using namespace std;
 
 class Rational{
@@ -38,10 +39,56 @@ const Rational operator* (const Rational& lhs, const Rational& rhs){
     return res;
 }
 
+
+class Window{
+public:
+    Window(){}
+    Window(int w, int h):width(w),height(h){}
+    virtual ~Window(){}
+    virtual void onResize(){
+        width = 1;
+        height = 1;
+    }
+    int getWidth() { return width; }
+    int getHeight() { return height; }
+
+private:
+    int width;
+    int height;
+};
+
+class SpecialWindow: public Window{
+public:
+    SpecialWindow(){}
+    SpecialWindow(int w, int h, int sm):Window(w,h),specialMisc(sm){}
+    virtual ~SpecialWindow(){}
+    virtual void onResize(){
+        static_cast<Window>(*this).onResize();   // 这样是错误的，不应该转型，这样会在转型副本上执行操作
+        //Window::onResize();       // 正确的操作
+        specialMisc = 1;
+    }
+    void print(string pre){
+        cout << pre << endl;
+        cout << "w: " << getWidth() << ", h: " << getHeight() << ", misc: " << specialMisc << endl;
+    }
+private:
+    int specialMisc;
+};
+
 int main()
 {
+    // Rational类测试
+    /*
     Rational oneHalf(1, 2);
     Rational result = 4 * oneHalf;
     cout << result.getNumerator() << "/" << result.getDenominator() << endl;
+    */
+
+    // Window类测试
+    SpecialWindow sw(4, 6, 7);
+    sw.print("origin:");
+    sw.onResize();         // attention! 当要转型时，这是一个可能发生错误的警告
+    sw.print("after onResize:");
+
     return 0;
 }
