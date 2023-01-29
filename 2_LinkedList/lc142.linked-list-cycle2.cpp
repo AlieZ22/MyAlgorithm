@@ -28,7 +28,7 @@ public:
         return nullptr;
     }
 
-    // 哈希表：碰到循环访问的第一个就是环的起点
+    // 哈希表：碰到循环访问的第一个就是环的起点； 空间复杂度：O(n)
     ListNode* detectCycle2(ListNode *head){
         ListNode *curr = head;
         unordered_set<ListNode*> visited;
