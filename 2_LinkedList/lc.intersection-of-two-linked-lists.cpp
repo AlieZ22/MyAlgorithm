@@ -2,6 +2,11 @@
 #include "ListNode.h"
 using namespace std;
 
+/*
+* @method: 快慢指针在两个链表上，fast先移动一个链表长度差
+* @evaluation: O(m+n)
+*/
+
 class Solution_interview0207 {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
