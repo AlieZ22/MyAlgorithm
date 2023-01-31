@@ -75,6 +75,14 @@ private:
     int specialMisc;
 };
 
+
+class Empty{ };
+
+class HoldsAnInt: private Empty{
+private:
+    int x;
+};
+
 int main()
 {
     // Rational类测试
@@ -85,10 +93,19 @@ int main()
     */
 
     // Window类测试
+    /*
     SpecialWindow sw(4, 6, 7);
     sw.print("origin:");
     sw.onResize();         // attention! 当要转型时，这是一个可能发生错误的警告
     sw.print("after onResize:");
+    */
+
+    // Empty类测试
+    Empty e;
+    HoldsAnInt h;
+    cout << "sizeof(Empty): " << sizeof(e) << endl;
+    cout << "sizeof(HoldsAnInt): " << sizeof(h) << endl;
+    cout << "sizeof(int): " << sizeof(int) << endl;
 
     return 0;
 }
