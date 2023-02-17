@@ -28,7 +28,7 @@ public:
         return res;
     }
     int evalRPN(vector<string>& tokens) {
-        int a=0, b=0, tmp=0;
+        int a=0, b=0;
         for(string s: tokens){
             if(s.size()==1 && isOps(s[0])){      // 遇到符号解释执行算数运算,有可能有负数（s[0]为－）
                 b = numStack.top();
