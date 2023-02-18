@@ -25,20 +25,20 @@ public:
         traversal(root, res);
         return res;
     }
-    // 迭代法解决二叉树前序遍历（直接处理根节点，先入栈右孩子再入栈左孩子，这样访问顺序就是中左右）
+    // 迭代法解决二叉树前序遍历
     vector<int> preorderTraversal1(TreeNode* root){
         vector<int> res;
         stack<TreeNode *> st;
-        if(root!=nullptr) st.push(root);
-        while(!st.empty()){
-            TreeNode *node = st.top();
+        TreeNode *node = root;
+        while(!st.empty() || node){
+            while(node){
+                res.push_back(node->val);
+                st.push(node);
+                node = node->left;
+            }
+            node = st.top();
             st.pop();
-            res.push_back(node->val);
-            // 先入栈右节点，再入栈左节点
-            if(node->right)
-                st.push(node->right);
-            if(node->left)
-                st.push(node->left);
+            node = node->right;
         }
         return res;
     }
