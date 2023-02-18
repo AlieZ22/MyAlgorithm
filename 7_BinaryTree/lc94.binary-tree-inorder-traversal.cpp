@@ -1,10 +1,11 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 #include "TreeNode.h"
 using namespace std;
 
 /*
-* @method: 递归法，二叉树中序遍历（左-中-右）
+* @method: 二叉树中序遍历（左-中-右）
 */
 
 class Solution94 {
@@ -18,6 +19,24 @@ public:
     vector<int> inorderTraversal(TreeNode* root) {
         vector<int> res;
         traversal(root, res);
+        return res;
+    }
+    // 迭代法
+    vector<int> inorderTraversal1(TreeNode* root){
+        vector<int> res;
+        stack<TreeNode *> st;
+        TreeNode *curr = root;
+        while(curr != nullptr || !st.empty()){
+            if(curr != nullptr){        // 指针往左深入
+                st.push(curr);
+                curr = curr->left;
+            }else{
+                curr = st.top();
+                st.pop();
+                res.push_back(curr->val);
+                curr = curr->right;
+            }
+        }
         return res;
     }
 };
