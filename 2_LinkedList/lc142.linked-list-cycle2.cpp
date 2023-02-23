@@ -16,7 +16,7 @@ public:
         while(fast != nullptr && fast->next != nullptr){
             fast = fast->next->next;
             slow = slow->next;
-            if(slow == fast){    // 有环，得到相交点
+            if(slow == fast){    // 有环，得到相交点，slow置为head，与fast同步向前
                 slow = head;
                 while(slow != fast){
                     slow = slow->next;
