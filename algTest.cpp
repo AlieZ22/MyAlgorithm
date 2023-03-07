@@ -1,59 +1,48 @@
 #include<iostream>
+#include<vector>
 #include<algorithm>
 using namespace std;
 
 const int N = 10;
 
-// 快速排序 练习
-void quick_sort(int q[], int l, int r)
-{
-    if(l >= r) return;
-
-    int i = l - 1, j = r + 1, x = q[l + r >> 1];
-    while(i<j){
-        do i++; while (q[i] < x);
-        do j--; while (q[j] > x);
-        if(i<j) swap(q[i], q[j]);
+class Solution {
+public:
+    int res ;
+    void selectQuickSort(vector<int>& nums, int l, int r, int k){
+        if(l > r) return;
+        int i=l-1, j=r+1, x=nums[(l+r)>>1], index = (l+r)>>1;
+        while(i < j){
+            do ++i; while(nums[i] > x);
+            do --j; while(nums[j] < x);
+            if(i<j){
+                swap(nums[i], nums[j]);
+                if(i == index){
+                    index = j;
+                }else if(j == index){
+                    index = i;
+                }else{}
+            }
+        }
+        if(index == k-1){
+            res = nums[index];
+            return;
+        }else if(index > k-1){
+            selectQuickSort(nums,l,j,k);
+        }else{
+            selectQuickSort(nums,j+1,r,k);
+        }
     }
-    quick_sort(q, l, j);
-    quick_sort(q, j+1, r);
-}
-
-// 归并排序 练习
-int tmp[N];
-void merge_sort(int q[], int l, int r)
-{
-    if(l >= r)
-        return;
-
-    int mid = (r - l) / 2 + l;
-    merge_sort(q, l, mid);
-    merge_sort(q, mid + 1, r);
-
-    int k = 0, i = l, j = mid + 1;
-    while(i<=mid && j<=r){
-        if(q[i] <= q[j])
-            tmp[k++] = q[i++];
-        else
-            tmp[k++] = q[j++];
+    int findKthLargest(vector<int>& nums, int k) {
+        selectQuickSort(nums,0,nums.size()-1,k);
+        return res;
     }
-    while(i<=mid)
-        tmp[k++] = q[i++];
-    while(j<=r)
-        tmp[k++] = q[j++];
-    for (i = l, j = 0; i <= r; i++, j++)
-        q[i] = tmp[j];
-}
-
+};
 
 
 int main()
 {
-    int arr[N] = {8, 1, 9, 10, 83, 234, 12, 12, 13, 15};
-    merge_sort(arr, 0, N-1);
-    cout << "after sort: ";
-    for (int i = 0; i < N; i++){
-        cout << arr[i] << " ";
-    }
-    cout << endl;
+    vector<int> vec{-1,2,0};
+    Solution s;
+    cout << s.findKthLargest(vec, 1) << endl;
+    return 0;
 }
