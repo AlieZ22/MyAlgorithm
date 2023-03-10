@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 /*
@@ -9,7 +10,7 @@ class Solution62 {
 public:
     // dfs会超时的，需要用dp来做
     int uniquePaths(int m, int n) {
-        int dp[m][n];
+        vector<vector<int>> dp(m, vector<int>(n, 0));
         int i=0, j=0;
         for(i=0;i<m;++i){
             dp[i][0] = 1;
@@ -25,3 +26,9 @@ public:
         return dp[m-1][n-1];
     }
 };
+
+int main(){
+    Solution62 s;
+    cout<< s.uniquePaths(3, 6) <<endl;
+    return 0;
+}
