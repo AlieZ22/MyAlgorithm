@@ -1,81 +1,57 @@
 #include <iostream>
+#include <unordered_map>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
-const int N = 10001;
-int node[N];
-int fa[N];
+// ac：37%
+
+const int N = 10e5+1;
+int s_time;    // 小美的全局时间
+int e_time;
+int a[N] = {0};        // 在i时刻能够看到的流星数
+int b[N] = {0};        // 差分数组，[l,r] + c
+int starTime[N][2];    // 所有流星的开始-结束
 int n;
-int res = 0;
 
-int findLeft(int root){
-    return 2 * root + 1;
-}
-
-int findRight(int root){
-    return 2 * root + 2;
-}
-
-vector<int> dfs(int root){      // 返回子树的 (红，蓝)数
-    if(root >= n) 
-        return vector<int>();
-    vector<int> vec(2);
-    if(findLeft(root) >= n && findRight(root) >= n){    // 叶子节点
-        ++res;
-        if(node[root] == 1)
-            vec[0] = 1;
-        if(node[root] == 0)
-            vec[1] = 1;
-        return vec;
-    }
-    vector<int> left;
-    vector<int> right;
-    if(findLeft(root) < n)
-        left = dfs(findLeft(root));
-    if(findRight(root) < n){
-        right = dfs(findRight(root));
-    }
-    int red = 0, blue = 0;
-    if(left.size()!=0){
-        red += left[0];
-        blue += left[1];
-    }
-    if(right.size()!=0){
-        red += right[0];
-        blue += right[1];
-    }
-    if(red == blue)
-        res++;
-    vector<int> tmp(2);
-    tmp[0] = red;
-    tmp[1] = blue;
-    return tmp;
+void insert(int l, int r, int c){
+    b[l] += c;
+    b[r + 1] -= c;
 }
 
 int main(){
-    char c;
-    int x;
-    cin>>n;
-    for (int i = 0; i < n; ++i){
-        cin >> c;
-        if(c == 'R') node[i] = 1;
-        if(c == 'B') node[i] = 0;
+    int time;
+    cin >> n;
+    for (int i = 1; i <= n; ++i){
+        cin >> time;
+        starTime[i][0] = time;
     }
-    for (int i = 1; i < n; ++i){
-        cin >> x;
-        fa[i] = x - 1;
+    for (int i = 1; i <= n; ++i){
+        cin >> time;
+        starTime[i][1] = time;
     }
-    vector<int> vec = dfs(0);
-    cout << res << endl;
+    for (int i = 1; i <= n; ++i){
+        insert(starTime[i][0], starTime[i][1], 1);
+    }
+    int maxN = 0;
+    int cnt = 0;
+    for (int i = 1; i <= N; ++i){
+        a[i] = a[i - 1] + b[i];
+        if(a[i] == maxN){
+            ++cnt;
+        }
+        if(maxN < a[i]){
+            maxN = a[i];
+            cnt = 1;
+        }
+    }
+    cout << maxN << " " << cnt << endl;
     return 0;
 }
 
-
-
 /*
-6
-RBRRBR
-1 1 2 2 3
-
->> 4
+3
+1 2 5
+3 6 7
+>> 2 4
 */
