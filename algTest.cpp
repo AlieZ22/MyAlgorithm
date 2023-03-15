@@ -1,77 +1,61 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int Len = 12+1;
-int n, m, p;
-int bag[Len];
-int ans[Len];      // 总是保存最小字典序的
-int isGet = 0;
+const int N = 10e5+10;
+int t, n;
+typedef pair<int,int> PII;
+PII a[N];
+int dp[N];
 
-// AC：98%
+// error: 没有考虑到a-first相等的情况，即first不一定严格单增
+// solution: 当first相同时，second降序排，这样就不会重复统计
 
-void updateAns(){
-    if(!isGet){
-        for(int i=1; i<=m; ++i){
-            ans[i] = bag[i];
-        }
-        isGet = 1;
+bool cmp(const PII& p1, const PII& p2){
+    if(p1.first < p2.first){
+        return true;
+    }else if(p1.first > p2.first){
+        return false;
     }else{
-        int changeSign = 0;
-        for(int i=1; i<=m; ++i){
-            if(bag[i] < ans[i]){
-                changeSign = 1;
-                break;
-            }
-        }
-        if(changeSign==1){
-            for(int i=1; i<=m; ++i){
-                ans[i] = bag[i];
-            }
+        if(p1.second > p2.second){
+            return true;
+        }else{
+            return false;
         }
     }
 }
 
-void checkPrice(){
-    int price = 0;
-    for(int i=1; i<=m; ++i){
-        price += bag[i]*bag[i];
-    }
-    if(price == p){
-        updateAns();
-    }
-}
-
-void dfs(int num){
-    if(num == 0){
-        checkPrice();
-        return;
-    }
-    // 每次总是尝试先放入最后一个格子
-    for(int i=m; i>0; --i){
-        if(i==m || bag[i]+1 <= bag[i+1]){        // 剪枝，保证bag单调递增
-            ++bag[i];
-            dfs(num-1);
-            --bag[i];
+int findMaxObj(){
+    int cnt = 0;
+    // 小-大
+    // a-first升序，相同时a-second降序
+    sort(a+1, a+n+1, cmp);
+    // a-second中取最长递增子序列
+    for(int i=1; i<=n; ++i) dp[i]=1;
+    for(int i=2; i<=n; ++i){
+        for(int j=1; j<i; ++j){
+            if(a[i].second > a[j].second) dp[i] = max(dp[i], dp[j]+1);
         }
+        if(dp[i] > cnt) cnt=dp[i];
     }
+    return cnt;
 }
 
 int main(){
-    scanf("%d %d %d", &n, &m, &p);
-    for(int i=1; i<=m; ++i){
-        bag[i] = 1;
-    }
-    n = n-m;
-    dfs(n);
-    if(isGet){
-        for(int i=1; i<=m; ++i){
-            cout<<ans[i];
-            if(i!=m){
-                cout<<" ";
-            }
+    scanf("%d", &t);
+    int tmp;
+    int res;
+    while(t--){
+        scanf("%d", &n);
+        for(int i=1;i<=n;++i){
+            scanf("%d", &tmp);
+            a[i].first = tmp;
         }
-    }else{
-        cout<<-1<<endl;
+        for(int i=1;i<=n;++i){
+            scanf("%d", &tmp);
+            a[i].second = tmp;
+        }
+        res = findMaxObj();
+        cout<<res<<endl;
     }
     return 0;
 }
