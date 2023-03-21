@@ -1,61 +1,60 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
-const int N = 10e5+10;
-int t, n;
-typedef pair<int,int> PII;
-PII a[N];
-int dp[N];
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
 
-// error: 没有考虑到a-first相等的情况，即first不一定严格单增
-// solution: 当first相同时，second降序排，这样就不会重复统计
-
-bool cmp(const PII& p1, const PII& p2){
-    if(p1.first < p2.first){
-        return true;
-    }else if(p1.first > p2.first){
-        return false;
-    }else{
-        if(p1.second > p2.second){
-            return true;
-        }else{
-            return false;
+class Solution {
+public:
+    PNN reverseSubList(ListNode* front, ListNode* tail){
+        ListNode *pre = tail->next;
+        ListNode *node = front;
+        while(pre!=tail){
+            ListNode *nex = node->next;
+            node->next = pre;
+            pre = node;
+            node = nex;
         }
+        return PNN{tail, front};
     }
-}
-
-int findMaxObj(){
-    int cnt = 0;
-    // 小-大
-    // a-first升序，相同时a-second降序
-    sort(a+1, a+n+1, cmp);
-    // a-second中取最长递增子序列
-    for(int i=1; i<=n; ++i) dp[i]=1;
-    for(int i=2; i<=n; ++i){
-        for(int j=1; j<i; ++j){
-            if(a[i].second > a[j].second) dp[i] = max(dp[i], dp[j]+1);
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode *dummy = new ListNode(-1,head);
+        ListNode *pre = dummy;
+        ListNode *nex = dummy;
+        while(nex!=nullptr){
+            int _k = k;
+            while(_k--){
+                nex = nex->next;
+                if(nex==nullptr){
+                    return dummy->next;
+                }
+            }
+            ListNode *front = pre->next;
+            PNN nodes = reverseSubList(front, nex);
+            pre->next = nodes.first;
+            pre = nodes.second;
+            nex = nodes.second;
         }
-        if(dp[i] > cnt) cnt=dp[i];
+        return dummy->next;
     }
-    return cnt;
-}
+};
 
 int main(){
-    scanf("%d", &t);
-    int tmp;
-    int res;
-    while(t--){
-        scanf("%d", &n);
-        for(int i=1;i<=n;++i){
-            scanf("%d", &tmp);
-            a[i].first = tmp;
-        }
-        for(int i=1;i<=n;++i){
-            scanf("%d", &tmp);
-            a[i].second = tmp;
-        }
-        res = findMaxObj();
-        cout<<res<<endl;
+    Solution s;
+    ListNode *n5 = new ListNode(5,nullptr);
+    ListNode *n4 = new ListNode(4,n5);
+    ListNode *n3 = new ListNode(3,n4);
+    ListNode *n2 = new ListNode(2,n3);
+    ListNode *n1 = new ListNode(1,n2);
+    ListNode *res = s.reverseKGroup(n1, 2);
+    while(res!=nullptr){
+        cout<<res->val<<endl;
+        res = res->next;
     }
     return 0;
 }
