@@ -6,37 +6,35 @@ using namespace std;
 typedef pair<ListNode*, ListNode*> PNN;
 class Solution25 {
 public:
-    PNN reverseSubList(ListNode* head, ListNode* tail){
+    PNN reverseSubList(ListNode* front, ListNode* tail){
         ListNode *pre = tail->next;
-        ListNode *p = head;
+        ListNode *node = front;
         while(pre!=tail){
-            ListNode *n = p->next;
-            p->next = pre;
-            pre = p;
-            p = n;
+            ListNode *nex = node->next;
+            node->next = pre;
+            pre = node;
+            node = nex;
         }
-        return PNN{tail, head};
+        return PNN{tail, front};
     }
     ListNode* reverseKGroup(ListNode* head, int k) {
-        ListNode *dummy = new ListNode(-1, head);
+        ListNode *dummy = new ListNode(-1,head);
         ListNode *pre = dummy;
-        ListNode *n = dummy;
-        int _k = k;
-        while(n!=nullptr){
-            _k = k;
+        ListNode *nex = dummy;
+        while(nex!=nullptr){
+            int _k = k;
             while(_k--){
-                n = n->next;
-                if(n==nullptr){
+                nex = nex->next;
+                if(nex==nullptr){
                     return dummy->next;
                 }
             }
-            cout<<n->val<<endl;
-            PNN nodes = reverseSubList(pre->next, n);
+            ListNode *front = pre->next;
+            PNN nodes = reverseSubList(front, nex);
             pre->next = nodes.first;
             pre = nodes.second;
-            n = nodes.second;
+            nex = nodes.second;
         }
-        ListNode *res = dummy->next;
-        return res;
+        return dummy->next;
     }
 };
