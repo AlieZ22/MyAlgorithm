@@ -1,59 +1,54 @@
-#include <iostream>
-#include <unordered_map>
+#include <bits/stdc++.h>
 using namespace std;
-
-/*
-* 使用哈希表+双向链表，实现O(1) get和put
-* 哈希表快速定位，双向链表增删方便
-*/
 
 struct DLinkNode{
     int key, value;
     DLinkNode *prev;
     DLinkNode *next;
-    DLinkNode():key(0),value(0),prev(nullptr),next(nullptr){}
-    DLinkNode(int _key, int _value):key(_key),value(_value),prev(nullptr),next(nullptr){}
+    DLinkNode():key(0), value(0), prev(nullptr), next(nullptr){}
+    DLinkNode(int k, int v): key(k), value(v), prev(nullptr), next(nullptr){}
 };
 
-class LRUCache{
+class LRUCache {
 private:
-    unordered_map<int, DLinkNode *> cache;
+    unordered_map<int, DLinkNode*> cache;
     DLinkNode *head;
     DLinkNode *tail;
-    int size;
     int capacity;
+    int size;
 public:
-    LRUCache(int _capacity):capacity(_capacity),size(0){
-        // 使用伪头节点和伪尾节点
+    LRUCache(int _capacity):capacity(_capacity),size(0) {
+        // 伪头节点和伪尾节点
         head = new DLinkNode();
         tail = new DLinkNode();
         head->next = tail;
         tail->prev = head;
     }
-    int get(int key){
+
+    int get(int key) {
         if(!cache.count(key)){
             return -1;
         }
-        // 如果key存在，先通过哈希表定位，再移到头部
         DLinkNode *node = cache[key];
         moveToHead(node);
         return node->value;
     }
-    void put(int key, int value){
+    
+    void put(int key, int value) {
         if(!cache.count(key)){
-            // 若key不存在，创建一个新的节点
+            // 创建新的节点
             DLinkNode *node = new DLinkNode(key, value);
             cache[key] = node;
             addToHead(node);
             ++size;
-            // 如果超出容量，删除尾部节点（最不常使用的）
-            if(size > capacity){
-                DLinkNode *removed = removeTail();
-                cache.erase(removed->key);
-                delete removed;
-                --size;
+            if(size > capacity){         // 超出容量，删除尾部节点
+                DLinkNode *node = tail->prev;
+                removeNode(node);
+                cache.erase(node->key);
+                delete node;
+                --size; 
             }
-        }else{      // 如果key存在，那么通过哈希表定位，修改value，再移到头部
+        }else{
             DLinkNode *node = cache[key];
             node->value = value;
             moveToHead(node);
@@ -72,10 +67,5 @@ public:
     void moveToHead(DLinkNode *node){
         removeNode(node);
         addToHead(node);
-    }
-    DLinkNode* removeTail(){
-        DLinkNode *node = tail->prev;
-        removeNode(node);
-        return node;
     }
 };
