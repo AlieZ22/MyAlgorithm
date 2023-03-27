@@ -5,23 +5,18 @@ using namespace std;
 
 class Solution_hot3 {
 public:
-    bool isRepeat(unordered_map<char,int>& umap){
-        for(auto it=umap.begin(); it!=umap.end(); ++it){
-            if(it->second > 1) return true;
-        }
-        return false;
-    }
     // 滑动窗口，j一直增长，i在重复的时候缩小至不重复
     int lengthOfLongestSubstring(string s) {
-        unordered_map<char,int> umap;
+        unordered_map<int, int> umap;
         int maxLen = 0;
-        int i=0, j=0;
-        for(; j<s.size(); ++j){
+        int i=0, j;
+        for(j=0; j<s.size(); ++j){
             ++umap[s[j]];
-            while(i<j && isRepeat(umap)){
-                --umap[s[i++]];
+            while(i<j && umap[s[j]]>1){         // 只需要检查umap[s[j]]即可，因为之前的umap肯定都不大于1
+                --umap[s[i]];
+                ++i;
             }
-            maxLen = maxLen < (j-i+1)? (j-i+1):maxLen;
+            maxLen = max(maxLen, j-i+1);
         }
         return maxLen;
     }
