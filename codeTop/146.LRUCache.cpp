@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <mutex>
 using namespace std;
 
 struct DLinkNode{
@@ -16,6 +17,7 @@ private:
     DLinkNode *tail;
     int capacity;
     int size;
+    //mutex _mutex;   // 实现多线程安全
 public:
     LRUCache(int _capacity):capacity(_capacity),size(0) {
         // 伪头节点和伪尾节点
@@ -26,6 +28,7 @@ public:
     }
 
     int get(int key) {
+        //lock_guard<mutex> lock(_mutex);       // RAII思想，用对象管理资源
         if(!cache.count(key)){
             return -1;
         }
@@ -35,6 +38,7 @@ public:
     }
     
     void put(int key, int value) {
+        //lock_guard<mutex> lock(_mutex);        // get,put方法都需要加锁
         if(!cache.count(key)){
             // 创建新的节点
             DLinkNode *node = new DLinkNode(key, value);
