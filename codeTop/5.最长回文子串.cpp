@@ -8,7 +8,7 @@ public:
         int maxLen = 1;
         int resIdx = 0;   // idx
         int n = s.size();
-        for(int k=0;k<n;++k){
+        for(int k=0;k<n;++k){     // 遍历每一个字符，从中间向两边扩散
             int i=k-1, j=k+1;
             int len =1;
             // 先同样字符扩散
