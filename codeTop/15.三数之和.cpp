@@ -3,6 +3,8 @@
 #include <algorithm>
 using namespace std;
 
+const int N = 3000 + 10;
+int tmp[N];
 class Solution_hot15 {
 public:
     void quicksort(vector<int>& vec, int l, int r){
@@ -15,6 +17,22 @@ public:
         }
         quicksort(vec,l, j);
         quicksort(vec,j+1, r);
+    }
+    void merge_sort(vector<int>& nums, int l, int r){
+        if(l>=r) return;
+        
+        int mid = (l+r)>>1;
+        merge_sort(nums, l, mid);
+        merge_sort(nums, mid+1, r);
+
+        int k=0, i=l, j=mid+1;
+        while(i<=mid && j<=r){
+            if(nums[i] < nums[j]) tmp[k++]=nums[i++];
+            else tmp[k++]=nums[j++];
+        }
+        while(i<=mid){ tmp[k++]=nums[i++]; }
+        while(j<=r) {tmp[k++]=nums[j++]; }
+        for(int i=l, j=0; i<=r; ++i, ++j) nums[i]=tmp[j];
     }
     // 注意，不能存在相同答案，但是数组中有重复元素，答案使用重复元素可以
     vector<vector<int>> threeSum(vector<int>& nums) {
