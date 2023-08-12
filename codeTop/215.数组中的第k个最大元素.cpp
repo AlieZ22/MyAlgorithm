@@ -2,7 +2,6 @@
 #include <vector>
 using namespace std;
 
-
 /*
 * @method: 建立一个大根堆，做k-1次删除之后，堆顶元素就是答案
 */
@@ -28,13 +27,13 @@ public:
         }
     }
     int findKthLargest(vector<int>& nums, int k) {
-        int heapSize = nums.size();
-        buildMaxHeap(nums, heapSize);
         // 删除过程，每次删除堆顶，将最后一个元素移到堆顶，然后调整堆结构
-        for (int i = nums.size() - 1; i >= nums.size() - k + 1; --i){
-            swap(nums[0], nums[i]);
-            --heapSize;
-            adjustHeap(nums, 0, heapSize);
+        int n = nums.size();
+        buildMaxHeap(nums, n);
+        for(int i=1; i<k; ++i){
+            swap(nums[0], nums[nums.size()-i]);        // 注意这里要为nums.size()
+            --n;
+            adjustHeap(nums, 0, n);
         }
         return nums[0];
     }
