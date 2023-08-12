@@ -9,7 +9,7 @@ using namespace std;
 class Solution_hot53 {
 public:
     int maxSubArray(vector<int>& nums) {
-        int *dp = new int[nums.size()];
+        vector<int> dp(nums.size());
         dp[0] = nums[0];
         int res = dp[0];
         for(int i=1; i<nums.size(); ++i){
