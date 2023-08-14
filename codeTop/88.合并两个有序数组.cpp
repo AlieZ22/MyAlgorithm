@@ -2,31 +2,16 @@
 #include <vector>
 using namespace std;
 
+// 从后往前遍历，nums1就不用移动位置了
 class Solution_hot88 {
 public:
     void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
-        // 先把nums1后移n个单位
-        int i=m-1, j=m+n-1;
-        while(i>=0){
-            nums1[j--] = nums1[i--];
+        int k = m+n-1, i=m-1, j=n-1;
+        while(i>=0 && j>=0){
+            if(nums1[i] >= nums2[j]) nums1[k--]=nums1[i--];
+            else nums1[k--]=nums2[j--];
         }
-        // 归并排序， i指向nums1, j指向nums2
-        i = n;
-        j = 0;
-        int curr = 0;
-        while(i < n+m && j < n){
-            if(nums1[i] <= nums2[j]){
-                nums1[curr++] = nums1[i++];
-            }else{
-                nums1[curr++] = nums2[j++];
-            }
-        }
-        // 处理后续
-        while(i < n+m){
-            nums1[curr++] = nums1[i++];
-        }
-        while(j < n){
-            nums1[curr++] = nums2[j++];
-        }
+        while(i>=0){nums1[k--] = nums1[i--];}
+        while(j>=0){nums1[k--] = nums2[j--];}
     }
 };
