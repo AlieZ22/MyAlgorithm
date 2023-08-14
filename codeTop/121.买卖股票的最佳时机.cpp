@@ -9,13 +9,14 @@ using namespace std;
 class Solution_hot121 {
 public:
     int maxProfit(vector<int>& prices) {
-        int minValIndex = 0;
-        int maxP = 0, currP =0;
+        int minVal = INT_MAX;
+        int maxProf = 0;
         for(int i=0; i<prices.size(); ++i){
-            currP = prices[i] - prices[minValIndex];
-            maxP = currP > maxP? currP: maxP;
-            minValIndex = prices[i] < prices[minValIndex]? i: minValIndex;
+            if(minVal > prices[i]){
+                minVal = prices[i];
+            }
+            maxProf = max(maxProf, prices[i] - minVal);
         }
-        return maxP;
+        return maxProf;
     }
 };
