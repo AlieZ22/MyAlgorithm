@@ -8,33 +8,34 @@ using namespace std;
 
 class Solution_hot1650 {
 public:
-    int getLen(ListNode *root){
-        int cnt=0;
-        while(root!=nullptr){
-            ++cnt;
-            root = root->next;
-        }
-        return cnt;
-    }
+    // 先得到两链表的差，然后长链表先移动一定长度
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
         int lenA = getLen(headA);
         int lenB = getLen(headB);
-        if(lenA > lenB){
-            int x = lenA - lenB;
-            while(x--){
-                headA = headA->next;
-            }
-        }else{
-            int x = lenB - lenA;
-            while(x--){
-                headB = headB->next;
-            }
+        if(lenA >= lenB) return getInsection(headA, headB, lenA-lenB);
+        else return getInsection(headB, headA, lenB-lenA);
+    }
+
+    ListNode* getInsection(ListNode *headA, ListNode *headB, int distance){
+        while(distance--){
+            headA = headA->next;
         }
         while(headA!=nullptr && headB!=nullptr){
-            if(headA == headB) return headA;
+            if(headA == headB){
+                return headA;
+            }
             headA = headA->next;
             headB = headB->next;
         }
         return nullptr;
+    }
+
+    int getLen(ListNode *node){
+        int cnt = 0;
+        while(node != nullptr){
+            ++cnt;
+            node=node->next;
+        }
+        return cnt;
     }
 };
