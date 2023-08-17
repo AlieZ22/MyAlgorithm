@@ -3,7 +3,7 @@
 using namespace std;
 
 /*
-* @method:回溯
+* @method:回溯，还是要记忆这种统一写法
 */
 
 class Solution_hot46 {
