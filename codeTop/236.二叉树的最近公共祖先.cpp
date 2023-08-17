@@ -9,31 +9,39 @@ using namespace std;
 
 class Solution_hot236 {
 public:
-    unordered_map<int, bool> vis;      // 记录从p到root的路径
-    unordered_map<int, TreeNode*> fa;   // 记录所有节点的父节点
-    void dfs(TreeNode* node){
-        if(node==nullptr) return;
-        if(node->left!=nullptr){
-            fa[(node->left)->val] = node;
+    /*
+    先dfs遍历，获取所有节点的父节点；
+    然后存储p节点（点->根）的路径，自底向上遍历q节点至根；
+    在过程中找到第一个公共祖先。
+    */
+    unordered_map<TreeNode*, TreeNode*> fa;
+    unordered_map<TreeNode*, bool> p_path;
+
+    void dfs(TreeNode* root){
+        TreeNode *node = root;
+        if(node == nullptr) return;
+        if(node->left){
+            fa[node->left] = node;
+            dfs(node->left);
         }
-        if(node->right!=nullptr){
-            fa[node->right->val] = node;
+        if(node->right){
+            fa[node->right] = node;
+            dfs(node->right);
         }
-        dfs(node->left);
-        dfs(node->right);
     }
+
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         dfs(root);
-        fa[root->val] = nullptr;
-        // 记录P到root的路径
-        while(p!=nullptr){
-            vis[p->val] = true;
-            p = fa[p->val];
+        fa[root] = nullptr;
+        while(p != nullptr){
+            p_path[p] = true;   // 注意自己节点和root节点也要在path上
+            p = fa[p];
         }
-        // 检查q的路径中与vis重合的节点
-        while(q!=nullptr){
-            if(vis[q->val]) return q;
-            q = fa[q->val];
+        while(q != nullptr){
+            if(p_path.count(q)){
+                return q;
+            }
+            q = fa[q];
         }
         return nullptr;
     }
