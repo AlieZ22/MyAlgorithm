@@ -6,48 +6,40 @@ using namespace std;
 * @method: 找到pre，tail，反转中间部分链表，然后接起来
 */
 
-class Solution_hot92 {
+typedef pair<ListNode*, ListNode*> PNN;
+
+class Solution {
 public:
-    // 反转链表
-    ListNode* reverseList(ListNode* head){
-        ListNode *pre = nullptr;
-        ListNode *curr = head;
-        while(curr!=nullptr){
-            ListNode *next = curr->next;
-            curr->next = pre;
-            pre = curr;
-            curr = next;
-        }
-        return pre;
-    }
     ListNode* reverseBetween(ListNode* head, int left, int right) {
-        // 记录 pre, tail，反转中间的链
-        ListNode *dummy = new ListNode(0, head);
+        ListNode *dummy = new ListNode(-1, head);
         ListNode *pre = dummy;
-        ListNode *curr = head;
-        ListNode *headNode = nullptr, *tailNode = nullptr;
-        int cnt = 0;
-        while(curr!=nullptr && cnt <= right){
-            ++cnt;
-            if(cnt == left){
-                headNode = pre;
-            }
+        ListNode *front, *tail, *node = head;
+        int cnt = 1;
+        while(node != nullptr){
+            if(cnt < left){ pre = node; }
+            if(cnt == left){ front = node; }
             if(cnt == right){
-                tailNode = curr->next;
-                curr->next = nullptr;
+                tail = node;
                 break;
             }
-            pre = curr;
-            curr = curr->next;
+            node = node->next;
+            cnt++;
         }
-        ListNode *subNode = reverseList(headNode->next);
-        headNode->next = subNode;
-        while(subNode->next!=nullptr){
-            subNode = subNode->next;
+        PNN resNodes = reverseSubList(front, tail);
+        pre->next = resNodes.first;
+        return dummy->next;
+    }
+
+    PNN reverseSubList(ListNode* front, ListNode* tail){
+        ListNode *prev = tail->next;
+        ListNode *node = front;
+        ListNode *next = nullptr;
+        while(prev != tail){
+            next = node->next;
+            node->next = prev;
+            prev = node;
+            node = next;
         }
-        subNode->next = tailNode;
-        ListNode *res = dummy->next;
-        delete dummy;
-        return res;
+        return PNN{tail, front};
     }
 };
