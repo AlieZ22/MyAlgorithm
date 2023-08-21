@@ -3,46 +3,37 @@
 using namespace std;
 
 /*
-* @method: char，int互转，进位记录
+* @method: char，int互转，进位记录，反转res
 */
 
 class Solution_hot415 {
 public:
-    int toNum(char c){
-        return c-'0';
-    }
-    char toChar(int i){
-        return i+'0';
-    }
+    // 存到一个string里面，然后reverse
     string addStrings(string num1, string num2) {
-        if(num1.size() < num2.size()) return addStrings(num2, num1);
-        // 保证num1的length更大
-        int i = num1.size()-1, j = num2.size()-1;
-        int up = 0;
-        int tmp = 0;
-        while(i>=0 && j>=0){
-            tmp = (toNum(num1[i]) + toNum(num2[j]) + up);
-            num1[i] = toChar(tmp % 10);
-            up = tmp / 10;
-            --i;
-            --j;
+        string res = "";
+        int i = num1.size()-1;
+        int j = num2.size()-1;
+        int jin = 0;         // 进位
+        while(i>=0 || j>=0){
+            int tmp = jin;
+            if(i>=0){ tmp += (num1[i--] - '0'); }
+            if(j>=0){ tmp += (num2[j--] - '0'); }
+            jin = tmp / 10;
+            char c = char((tmp % 10) + '0');
+            res += c;
         }
-        // 取i剩下的
-        while(i>=0){
-            tmp = (toNum(num1[i]) + up);
-            num1[i] = toChar(tmp % 10);
-            up = tmp / 10;
-            --i;
+        if(jin != 0){
+            res += char(jin + '0');
         }
-        // 检查最后进位
-        if(up!=0){
-            num1.resize(num1.size()+1);
-            for(int j = num1.size()-1; j>0; --j){
-                int i = j-1;
-                num1[j] = num1[i];
-            }
-            num1[0] = toChar(up);
+        reverseStr(res);
+        return res;
+    }
+
+    void reverseStr(string& s){
+        int i=0; 
+        int j=s.size()-1;
+        while(i<j){
+            swap(s[i++], s[j--]);
         }
-        return num1;
     }
 };
