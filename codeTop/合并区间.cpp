@@ -23,6 +23,8 @@ int main(){
         }
         ed = max(ed, segs[i].second);
     }
+    //加入最后一个
+    res.push_back(PII{st,ed});
     cout<<res.size()<<endl;
     return 0;
 }
