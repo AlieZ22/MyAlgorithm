@@ -2,8 +2,37 @@
 #include "ListNode.h"
 using namespace std;
 
+// 最简单的方式：将所有节点存起来，成为一个有序线性表，依次连接
+bool cmp(const ListNode* a, const ListNode* b){
+    return a->val < b->val;
+}
+
+class Solution_hot23 {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        vector<ListNode*> vec;
+        for(int i=0; i<lists.size(); ++i){
+            ListNode *curr = lists[i];
+            while(curr!=nullptr){
+                vec.emplace_back(curr);
+                curr=curr->next;
+            }
+        }
+        sort(vec.begin(), vec.end(), cmp);
+        ListNode head, *tail = &head;
+        for(int i=0; i<vec.size(); ++i){
+            tail->next = vec[i];
+            tail = tail->next;
+        }
+        tail->next = nullptr;
+        return head.next;
+    }
+};
+
+
 
 // c++17特性 推导引导
+/*
 class Solution_hot23{
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists){
@@ -21,6 +50,7 @@ public:
         return head.next;
     }
 };
+*/
 
 
 // c++11 写法
