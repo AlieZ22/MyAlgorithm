@@ -4,7 +4,7 @@
 using namespace std;
 
 // 回溯，穷举所有ip地址
-class Solution {
+class Solution_hot93 {
 public:
     const static int SEG_COUNT = 4;
     vector<string> ans;
