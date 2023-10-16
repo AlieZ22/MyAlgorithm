@@ -10,7 +10,7 @@ private:
     int idx = -1;
 public:
     StockSpanner() {
-        sp.push({INT_MAX, -1});
+        sp.push({INT_MAX, -1});        // 栈底放一个max，保证栈底有元素
     }
     
     int next(int price) {
