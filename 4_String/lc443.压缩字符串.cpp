@@ -12,6 +12,7 @@ public:
     int compress(vector<char>& chars) {
         int cnt= 0;
         int n = chars.size();
+        // i：读指针；j：写指针
         int j=0;
         for(int i=0; i<n; ++i){
             cnt=1;
