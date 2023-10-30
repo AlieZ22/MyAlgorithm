@@ -26,15 +26,15 @@ public:
         if(node != nullptr) qt.push(node);
         while(!qt.empty()){
             int size = qt.size();
-            vector<int> tmp(size);
             for(int i=0; i<size; ++i){
                 node = qt.front();
                 qt.pop();
-                tmp[i] = node->val;
+                if(i == size-1){
+                    res.push_back(node->val);
+                }
                 if(node->left) qt.push(node->left);
                 if(node->right) qt.push(node->right);
             }
-            res.emplace_back(tmp.back());
         }
         return res;
     }
